@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sankofa Budget Desk</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <div class="desktop">
+      <header class="titlebar app-titlebar">
+        <div class="titlebar-name">
+          <span class="app-icon" aria-hidden="true"></span>
+          Sankofa Budget Desk
+        </div>
+        <div class="window-buttons" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </header>
+
+      <nav class="taskbar" aria-label="Application navigation">
+        <button class="start-button" type="button">Start</button>
+        <button class="task-button active" type="button">Dashboard</button>
+        <button class="task-button" type="button" data-scroll-target="news">Free News</button>
+        <button class="task-button" type="button" data-scroll-target="map">World Map</button>
+        <span class="task-spacer"></span>
+        <span class="clock" id="clock">--:--</span>
+      </nav>
+
+      <main class="workspace">
+        <section class="window dashboard-window" aria-labelledby="dashboard-title">
+          <div class="titlebar">
+            <h1 id="dashboard-title">Budget Dashboard</h1>
+            <div class="window-buttons" aria-hidden="true">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+
+          <div class="dashboard-body">
+            <section class="command-panel" aria-label="Budget actions">
+              <div>
+                <p class="eyebrow">Free static build</p>
+                <h2>Plan your money with neon calm.</h2>
+              </div>
+              <div class="command-buttons">
+                <button class="win-button primary" id="quick-expense" type="button">Add Expense</button>
+                <button class="win-button" id="rebalance" type="button">Rebalance</button>
+                <button class="win-button" id="export-csv" type="button">Export CSV</button>
+                <button class="win-button" id="reset-demo" type="button">Reset Demo</button>
+              </div>
+            </section>
+
+            <section class="stats-grid" aria-label="Budget summary">
+              <article class="stat-card">
+                <span>Monthly Income</span>
+                <strong id="income-value">$0</strong>
+              </article>
+              <article class="stat-card">
+                <span>Planned Spend</span>
+                <strong id="spend-value">$0</strong>
+              </article>
+              <article class="stat-card">
+                <span>Cash Left</span>
+                <strong id="left-value">$0</strong>
+              </article>
+              <article class="stat-card">
+                <span>Savings Rate</span>
+                <strong id="savings-rate">0%</strong>
+              </article>
+            </section>
+
+            <section class="chart-grid" aria-label="Charts and graphs">
+              <article class="chart-panel wide">
+                <div class="panel-heading">
+                  <h2>Income vs Spend</h2>
+                  <span>6 month graph</span>
+                </div>
+                <canvas id="bar-chart" height="220" aria-label="Bar chart showing income and spend" role="img"></canvas>
+              </article>
+
+              <article class="chart-panel">
+                <div class="panel-heading">
+                  <h2>Savings Orbit</h2>
+                  <span>Projection line</span>
+                </div>
+                <canvas id="line-chart" height="220" aria-label="Line graph showing savings projection" role="img"></canvas>
+              </article>
+
+              <article class="chart-panel">
+                <div class="panel-heading">
+                  <h2>Spending Mix</h2>
+                  <span>Pie chart</span>
+                </div>
+                <div class="pie-wrap">
+                  <canvas id="pie-chart" width="260" height="260" aria-label="Pie chart showing spending categories" role="img"></canvas>
+                  <ul id="pie-legend" class="legend"></ul>
+                </div>
+              </article>
+            </section>
+
+            <section class="ledger-panel" aria-labelledby="ledger-title">
+              <div class="panel-heading">
+                <h2 id="ledger-title">Recent Money Moves</h2>
+                <span id="status-note">Local browser storage</span>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col">Item</th>
+                      <th scope="col">Category</th>
+                      <th scope="col">Amount</th>
+                      <th scope="col">Date</th>
+                    </tr>
+                  </thead>
+                  <tbody id="ledger-body"></tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <aside class="window input-window" aria-labelledby="input-title">
+          <div class="titlebar">
+            <h2 id="input-title">Budget Input</h2>
+            <div class="window-buttons" aria-hidden="true">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+          <form id="budget-form" class="form-grid">
+            <label>
+              Monthly income
+              <input id="income" name="income" type="number" min="0" step="50" required>
+            </label>
+            <label>
+              Housing
+              <input id="housing" name="housing" type="number" min="0" step="25" required>
+            </label>
+            <label>
+              Food
+              <input id="food" name="food" type="number" min="0" step="25" required>
+            </label>
+            <label>
+              Transport
+              <input id="transport" name="transport" type="number" min="0" step="25" required>
+            </label>
+            <label>
+              Debt
+              <input id="debt" name="debt" type="number" min="0" step="25" required>
+            </label>
+            <label>
+              Savings goal
+              <input id="savings" name="savings" type="number" min="0" step="25" required>
+            </label>
+            <button class="win-button primary full" type="submit">Apply Budget</button>
+          </form>
+
+          <form id="expense-form" class="form-grid expense-form">
+            <h3>Add Expense</h3>
+            <label>
+              Name
+              <input id="expense-name" name="name" type="text" value="Record crate" maxlength="28" required>
+            </label>
+            <label>
+              Category
+              <select id="expense-category" name="category">
+                <option>Housing</option>
+                <option>Food</option>
+                <option>Transport</option>
+                <option>Joy</option>
+                <option>Debt</option>
+                <option>Savings</option>
+              </select>
+            </label>
+            <label>
+              Amount
+              <input id="expense-amount" name="amount" type="number" min="1" step="1" value="42" required>
+            </label>
+            <button class="win-button full" type="submit">Save Expense</button>
+          </form>
+        </aside>
+      </main>
+
+      <section class="lower-grid">
+        <section class="window news-window" id="news" aria-labelledby="news-title">
+          <div class="titlebar">
+            <h2 id="news-title">Free Money News Feed</h2>
+            <div class="window-buttons" aria-hidden="true">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+          <div class="feed-toolbar">
+            <span id="news-source">Loading free public feed...</span>
+            <button class="win-button small" id="refresh-news" type="button">Refresh</button>
+          </div>
+          <div class="news-feed" id="news-feed" aria-live="polite"></div>
+        </section>
+
+        <section class="window map-window" id="map" aria-labelledby="map-title">
+          <div class="titlebar">
+            <h2 id="map-title">World Spending Map</h2>
+            <div class="window-buttons" aria-hidden="true">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+          <div class="map-shell">
+            <svg class="world-map" viewBox="0 0 960 480" role="img" aria-labelledby="world-map-title world-map-desc">
+              <title id="world-map-title">Stylized world map with budget pulse markers</title>
+              <desc id="world-map-desc">A world map showing spending pulse markers across major regions.</desc>
+              <defs>
+                <linearGradient id="land-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#00f5d4"></stop>
+                  <stop offset="55%" stop-color="#f15bb5"></stop>
+                  <stop offset="100%" stop-color="#fee440"></stop>
+                </linearGradient>
+                <pattern id="map-pattern" width="28" height="28" patternUnits="userSpaceOnUse">
+                  <path d="M0 14H28M14 0V28" stroke="#111" stroke-width="2" opacity=".35"></path>
+                  <path d="M0 0L28 28M28 0L0 28" stroke="#fff" stroke-width="1" opacity=".18"></path>
+                </pattern>
+              </defs>
+              <rect class="map-ocean" width="960" height="480" rx="0"></rect>
+              <g class="lat-lines">
+                <path d="M40 120H920"></path>
+                <path d="M40 205H920"></path>
+                <path d="M40 290H920"></path>
+                <path d="M40 375H920"></path>
+              </g>
+              <g class="continents">
+                <path d="M110 110C150 68 230 68 286 92C333 113 337 146 310 169C284 192 242 185 229 218C216 249 246 266 222 293C192 327 125 306 95 270C62 229 61 159 110 110Z"></path>
+                <path d="M276 258C306 267 326 302 320 338C313 381 280 438 245 433C216 429 217 379 199 345C180 309 225 244 276 258Z"></path>
+                <path d="M435 126C472 104 531 111 556 145C580 178 546 200 502 193C459 187 416 157 435 126Z"></path>
+                <path d="M478 208C520 170 593 181 620 233C650 290 608 371 546 375C494 378 466 326 457 279C452 250 455 229 478 208Z"></path>
+                <path d="M572 109C646 67 779 89 849 150C890 186 857 238 785 236C731 235 714 277 659 260C611 246 625 205 584 192C542 178 526 136 572 109Z"></path>
+                <path d="M738 332C781 307 858 316 883 352C902 379 874 407 824 408C778 409 724 370 738 332Z"></path>
+                <path d="M377 157C395 143 424 148 431 169C437 189 411 206 384 195C360 185 358 172 377 157Z"></path>
+              </g>
+              <g class="map-pattern-fill">
+                <path d="M110 110C150 68 230 68 286 92C333 113 337 146 310 169C284 192 242 185 229 218C216 249 246 266 222 293C192 327 125 306 95 270C62 229 61 159 110 110Z"></path>
+                <path d="M276 258C306 267 326 302 320 338C313 381 280 438 245 433C216 429 217 379 199 345C180 309 225 244 276 258Z"></path>
+                <path d="M435 126C472 104 531 111 556 145C580 178 546 200 502 193C459 187 416 157 435 126Z"></path>
+                <path d="M478 208C520 170 593 181 620 233C650 290 608 371 546 375C494 378 466 326 457 279C452 250 455 229 478 208Z"></path>
+                <path d="M572 109C646 67 779 89 849 150C890 186 857 238 785 236C731 235 714 277 659 260C611 246 625 205 584 192C542 178 526 136 572 109Z"></path>
+                <path d="M738 332C781 307 858 316 883 352C902 379 874 407 824 408C778 409 724 370 738 332Z"></path>
+                <path d="M377 157C395 143 424 148 431 169C437 189 411 206 384 195C360 185 358 172 377 157Z"></path>
+              </g>
+              <g class="pulse-markers">
+                <g>
+                  <circle cx="218" cy="175" r="9"></circle>
+                  <text x="232" y="171">New York</text>
+                  <text x="232" y="188">$1.9k avg spend</text>
+                </g>
+                <g>
+                  <circle cx="283" cy="330" r="9"></circle>
+                  <text x="297" y="326">Sao Paulo</text>
+                  <text x="297" y="343">$840 avg spend</text>
+                </g>
+                <g>
+                  <circle cx="505" cy="165" r="9"></circle>
+                  <text x="519" y="161">London</text>
+                  <text x="519" y="178">$1.6k avg spend</text>
+                </g>
+                <g>
+                  <circle cx="532" cy="268" r="9"></circle>
+                  <text x="546" y="264">Lagos</text>
+                  <text x="546" y="281">$620 avg spend</text>
+                </g>
+                <g>
+                  <circle cx="684" cy="237" r="9"></circle>
+                  <text x="698" y="233">Mumbai</text>
+                  <text x="698" y="250">$710 avg spend</text>
+                </g>
+                <g>
+                  <circle cx="812" cy="188" r="9"></circle>
+                  <text x="826" y="184">Tokyo</text>
+                  <text x="826" y="201">$1.4k avg spend</text>
+                </g>
+              </g>
+            </svg>
+            <div class="map-caption">
+              <strong>Global pulse:</strong>
+              Free, local demo markers for comparing regional cost pressure.
+            </div>
+          </div>
+        </section>
+      </section>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
